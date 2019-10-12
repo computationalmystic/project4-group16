@@ -5,7 +5,7 @@
 To Do List:
 - Design UI
 - Class List:
--- tAInfo()
+-- taInfo()
 -- studentInfo()
 -- professorInfo()
 -- adminInfo()
