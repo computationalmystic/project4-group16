@@ -14,6 +14,7 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'appController','ojs/ojarraydataprov
       self.repoData1=[];
   
       //self.repoData=app.repo;
+        self.comboValue=ko.observable("");
       self.repoData1=[
   {
     "repo_id": 23156,
