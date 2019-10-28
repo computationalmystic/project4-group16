@@ -1,0 +1,114 @@
+<!--
+ Copyright (c) 2014, 2019, Oracle and/or its affiliates.
+ The Universal Permissive License (UPL), Version 1.0
+ -->
+<div class="oj-hybrid-padding" >
+ 
+ 
+  
+          <div>
+        <h1>AUGUR REPOSITORIES DATA</h1>
+        <h2>Enter a Repository name to find out several metrics.</h2>
+              <oj-combobox-one id="combobox" 
+                               style="max-width:20em" 
+                               options="{{repoData1}}" 
+                               options-keys.label="repo_name" 
+                               options-keys.value="repo_id" 
+                               on-value-changed="[[onRepoChange1]]"
+                               value="[[comboValue]]"
+                               placeholder="select ..">
+            
+            </oj-combobox-one>
+
+    </div>
+      
+  
+  
+  
+  <div data-bind="if:incidentsVisited">
+
+
+    <h1>TOP COMMITERS</h1>   
+          <div id='chart-container' >
+              <oj-chart id="pieChart"
+                  type="pie" 
+                  data="[[dataProvider]]"
+                  animation-on-display="auto"
+                  animation-on-data-change="auto"
+              
+                  hover-behavior="dim"
+                  style="max-width:500px;width:100%;height:350px;">
+          
+                  <template slot='itemTemplate' data-oj-as='item'>
+                      <oj-chart-item 
+                        value='[[item.data.value]]'
+                        group-id='[[ [item.data.group] ]]'
+                        series-id='[[item.data.series]]'> 
+                      </oj-chart-item>
+                  </template>
+              </oj-chart>
+      
+      
+      
+  </div>
+    
+
+     </div>
+  
+  
+  
+  
+      <div data-bind="if:pullRequests">
+          
+          <h1>PULL REQUEST ACCEPTANCE RATE
+  </h1>
+            <oj-status-meter-gauge 
+                    id="rogauge"
+                    
+                    min="0" 
+                    max="1" 
+                    value="{{pullRequestsValue}}" 
+                   
+                    metric-label.rendered="on"
+                    plot-area.rendered="on"
+                    readonly
+                     orientation="circular"
+                    readonly
+                    class="circular-status-meter-common circular-status-meter-large">
+                  </oj-status-meter-gauge>
+          <span data-bind="text:dateValue"></span>
+      </div>
+      
+  <div data-bind="if:backLogs">
+      <h1>ISSUE BACKLOGS</h1>
+      
+         <oj-chart id="barChart"
+                          type="bar"
+                          series="[[seriesValue]]"
+                          groups="[[groupsValue]]"
+                          animation-on-display="auto"
+                          animation-on-data-change="auto"
+
+                          legend.rendered="off"
+                          style="width:100%;height:225px;float:left;">
+                      </oj-chart>
+  </div>
+    
+      
+      
+</div>
+
+ 
+ <style>
+.circular-status-meter-common
+  {
+    align:center;
+    margin-top:5px;
+    margin-bottom:5px;
+    width:45%;
+  }
+  .circular-status-meter-large
+  {
+    height:250px;
+  }
+ </style>

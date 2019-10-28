@@ -1,0 +1,18 @@
+{
+    "elements": {
+        "oj-bind-if": {},
+        "oj-status-meter-gauge": {},
+        "oj-chart": {},
+        "style": {},
+        "oj-bind-text": {},
+        "oj-select-one": {},
+        "oj-option": {},
+        "oj-combobox-one": {},
+        "oj-chart-item": {}
+    },
+    "attributes": {
+        "slot": {
+            "context": "template"
+        }
+    }
+}
