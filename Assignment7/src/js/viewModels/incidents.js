@@ -13,8 +13,7 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'appController','ojs/ojarraydataprov
       var self = this;
       self.repoData1=[];
   
-      //self.repoData=app.repo;
-        self.comboValue=ko.observable("");
+      self.comboValue=ko.observable("");
       self.repoData1=[
   {
     "repo_id": 23156,
@@ -27353,10 +27352,10 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'appController','ojs/ojarraydataprov
     "base64_url": "Z2l0aHViLmNvbS9hcGFjaGUvY291Y2hkYi13d3cuZ2l0"
   }
 ];
- //this.dataProvider=ko.observableArray() ;
- app.incidentsVisited(true);
-var topCommitersArray=[];
-var tempArr=[];
+
+//app.incidentsVisited(true);
+
+
 this.group_id;
 this.repoId;
 
@@ -27364,35 +27363,40 @@ this.repoId;
 
 
 
- 
+var topCommitersArray=[]; 
 self.dataProvider=ko.observableArray();
 self.incidentsVisited=ko.observable(false);
 self.topcommitsdata=ko.observableArray();
+
    function topCommitters(group_id,repoId){
-    
+     
     
 $.get('http://augur.osshealth.io:5000/api/unstable/' + 'repo-groups/' + group_id + '/repos/' + repoId + '/top-committers' , function( data ) {
-  console.log(data);
+    console.log(topCommitters);
+    console.log(data);
+ if(data.length===0){
+         console.log("no topCommittersData");
+     }
  
-  tempArr=data;
-  console.log(tempArr);
-    for(var x in tempArr){
+ if(data.length!==0){
+    for(var x in data){
    topCommitersArray.push({"id": x,
-  "series": tempArr[x].email,
+  "series": data[x].email,
   "group": "Group A",
-  "value": tempArr[x].commits});
+  "value": data[x].commits});
   }
   
 self.topcommitsdata=topCommitersArray;
-console.log( self.topcommitsdata);
-  
+console.log(self.topcommitsdata);
+ console.log(topCommitersArray); 
    self.dataProvider=new ArrayDataProvider(self.topcommitsdata, {keyAttributes: 'id'});
    self.incidentsVisited(true);
    console.log(self.dataProvider);
 //console.log( self.incidentsVisited1);
 //console.log((app.topcommitsdata).toString());
-
-  });
+ }
+  
+});
 
 
 
@@ -27401,41 +27405,68 @@ console.log( self.topcommitsdata);
       self.pullRequestsValue=ko.observable();  
       self.pullRequests=ko.observable(false); 
        self.dateValue=ko.observable();   
+       var pullRequestArray=[];
+       self.pullRequestdata=ko.observableArray();
+       self.dataProvider1=ko.observableArray();
        
         function getPullRequests(group_id,repoId){
  $.get('http://augur.osshealth.io:5000/api/unstable/' + "repo-groups/" + group_id  + '/repos/' + repoId + '/pull-request-acceptance-rate', function( data ) {
-   
-    self.pullRequests(true);
-    var x=(data[0].rate);
-    self.pullRequestsValue(x);
-    console.log(data);
-    self.dateValue(data[0].date);
-    
+     if(data.length===0){
+         console.log("no pullRequestData");
+     }
+   if(data.length!==0){
+    for(var x in data){
+   pullRequestArray.push({"id": x,
+  "series": data[x].date,
+  "group": "TIME",
+  "value": data[x].rate});
+  }
+  
+self.pullRequestdata=pullRequestArray;
+console.log(self.pullRequestdata);
+ console.log(pullRequestArray); 
+   self.dataProvider1=new ArrayDataProvider(self.pullRequestdata, {keyAttributes: 'id'});
+   self.pullRequests(true);
+}
  });
    }
 
- 
+ var tempArr=[];
  self.backLogs=ko.observable(false);
  self.seriesValue=ko.observableArray();
  self.groupsValue=ko.observableArray("");
-         function getBackLogs(group_id,repoId){
+        
+        function getBackLogs(group_id,repoId){
               self.seriesValue.removeAll;
+              tempArr.removeAll;
  $.get('http://augur.osshealth.io:5000/api/unstable/' + "repo-groups/" + group_id + "/repos/" + repoId+ '/issue-backlog', function( data ) {
-   
+   if(data.length===0){
+         console.log("no getBackLogsData");
+     }
+    if(data.length!== 0){
+    console.log("getBackLogs");
+     console.log(data);
     self.backLogs(true);
-self.seriesValue.push({"name": "ISSUE BACKLOGS", "items": [data[0].issue_backlog]});
- self.groupsValue("");
+    for(var c in data){
+       tempArr.push(data[c].issue_backlog); 
+            console.log(tempArr);
+    }
+    self.seriesValue.push({"name": "ISSUE BACKLOGS", "items": tempArr});
+    self.groupsValue("");
 
-      
+    }    
  
  });
    }
        
        self.onRepoChange1=function(event){
+       console.log(topCommitersArray);
        topCommitersArray=[];
+       self.pullRequestsValue("");
+       self.dateValue("");
        self.incidentsVisited(false);
-        self.backLogs(false);
-         self.pullRequests(false); 
+       self.backLogs(false);
+       self.pullRequests(false); 
        this.group_id="";
          this.repoId="";
    for(let v=0;v<self.repoData1.length;v++){
